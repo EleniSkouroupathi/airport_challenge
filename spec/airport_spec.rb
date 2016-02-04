@@ -1,14 +1,15 @@
 require 'airport'
 
 describe Airport do
-	subject(:airport) { described_class.new(20) }
+	subject(:airport) { described_class.new(20, weather_reporter) }
 	let(:plane) { double :plane }
+	let:(weather_reporter) { double: weather_reporter }
 
 	describe '#land' do
 
 		context 'when not stormy' do
 			before do
-				allow(airport).to receive(:stormy?).and_return false
+				allow(weather_reporter).to receive(:stormy?).and_return false
 			end
 		
 			it 'instructs a plane to land' do
@@ -27,7 +28,7 @@ describe Airport do
 
 		context 'when stormy' do
 			before do
-				allow(airport).to receive(:stormy?).and_return true
+				allow(weather_reporter).to receive(:stormy?).and_return true
 			end
 
 			it 'raises an error' do
@@ -41,7 +42,7 @@ describe Airport do
 
 		context 'when not stormy' do
 			before do
-				allow(airport).to receive(:stormy?).and_return false
+				allow(weather_reporter).to receive(:stormy?).and_return false
 			end
 			it 'instructs a plane to takeoff' do
 				expect(airport).to respond_to(:take_off).with(1).argument
@@ -50,7 +51,7 @@ describe Airport do
 
 		context 'when stormy' do
 			before do
-				allow(airport).to receive(:stormy?).and_return true
+				allow(weather_reporter).to receive(:stormy?).and_return true
 			end
 			it 'does not allow planes to takeoff' do
 				expect { airport.take_off(plane) }.to raise_error 'Cannot take off plane: weather is stormy.'
